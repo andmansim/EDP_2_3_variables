@@ -1,5 +1,8 @@
 #Importamos las librerías necesarias
 import numpy as np
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from funciones_graficar import graficar_superficies
 
 # ===========================
@@ -76,7 +79,6 @@ def verificar_discretizacion (edp_parte1,edp_parte2, i, j):
 #========================
 # Método de Gauss-Seidel
 #========================
-
 def gauss_seidel_iterations(w, num_iter, tol=1e-5): 
     '''
     Aplicamos el metodo de gauss-seidel para resolver el problema del Laplaciano en 3D.
@@ -124,7 +126,9 @@ def gauss_seidel_iterations(w, num_iter, tol=1e-5):
 
 
 
-
+#========
+# Main
+#========
 if __name__ == "__main__":
     
     '''

@@ -54,7 +54,7 @@ def graficar_superficies(intervalos, w_final, X, Y, Z, titulo):
     fig.update_layout(title=f"{titulo}", autosize=True)
     
     #Guardar la figura como HTML
-    fig.write_html(f"{titulo}.html")
+    fig.write_html(f"Laplaciano/graficas/{titulo}.html")
     fig.show()
     
 
