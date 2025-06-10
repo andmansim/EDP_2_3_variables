@@ -1,6 +1,6 @@
 #Importamos las librerías necesarias
 import numpy as np
-from func_graficar import graficar_superficies
+from funciones_graficar import graficar_superficies
 
 # ===========================
 # Función inicial

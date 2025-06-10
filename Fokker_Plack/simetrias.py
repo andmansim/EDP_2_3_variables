@@ -2,7 +2,7 @@
 #Importar librerías
 import numpy as np
 from scipy.interpolate import interp1d
-from func_graficar import graficar_superficies_temporales, graficar_matrices_superpuestas, anima_comparacion, animar_derivadas_3d, graficar_derivadas_3d
+from funciones_graficar import graficar_superficies_temporales, graficar_matrices_superpuestas, anima_comparacion, animar_derivadas_3d, graficar_derivadas_3d
 
 
 # ===========================
