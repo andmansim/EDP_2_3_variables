@@ -2,7 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-def get_gradual_color_extreme(point, center_point, cmap):
+#========================
+# Función color gradual 
+#========================
+def color_gradual(point, center_point, cmap):
+    '''
+    Función que calcula un color gradual basado en la distancia de un punto a un punto central.
+    point: Tupla (x, y, z) del punto para el cual se calculará el color.
+    center_point: Tupla (x, y, z) del punto central al cual se calculará la distancia.
+    cmap: Colormap de matplotlib que se utilizará para mapear la distancia a un color.
+    '''
     # Calcular la distancia Euclidiana de un punto al punto extremo (0,0,8)
     dist = np.linalg.norm(np.array(point) - np.array(center_point))
     
@@ -16,7 +25,16 @@ def get_gradual_color_extreme(point, center_point, cmap):
     color = cmap(norm_val)
     return color
 
+#======
+# Main
+#======
 if __name__ == "__main__":
+    '''
+    Muestra una malla 3D abierta en el eje Z con puntos de vértices, bordes e interiores. 
+    Los puntos de vértices son rojos, los puntos en los bordes son morados y los puntos interiores son verdes.
+    Los colores de los puntos se determinan por un gradiente basado en la distancia al punto extremo (0,0,8).
+    '''
+    
     # Crear una malla 3D con solo 5 puntos en cada dimensión
     n = 6  # número de puntos en cada dimensión
     x = np.linspace(0, 8, n)
@@ -76,20 +94,22 @@ if __name__ == "__main__":
     z_min = np.min(z_points)
     z_max = np.max(z_points)
 
+    # Definir el punto extremo para el gradiente de color
     extreme_point = (0,0,8)
 
+    # Dibujar los puntos de los vértices (rojos) con gradiente de color basado en la distancia al extremo
     for vertex in vertices:
-        color = get_gradual_color_extreme(vertex, extreme_point, vertex_cmap)  # Gradiente basado en la distancia al extremo
+        color = color_gradual(vertex, extreme_point, vertex_cmap)  # Gradiente basado en la distancia al extremo
         ax.scatter(vertex[0], vertex[1], vertex[2], color=color, s=50)
 
     # Dibujar los puntos de los bordes (morado) con gradiente de color basado en la distancia al extremo
     for point in boundary_points:
-        color = get_gradual_color_extreme(point, extreme_point, boundary_cmap)  # Gradiente basado en la distancia al extremo
+        color = color_gradual(point, extreme_point, boundary_cmap)  # Gradiente basado en la distancia al extremo
         ax.scatter(point[0], point[1], point[2], color=color, s=30)
 
     # Dibujar los puntos interiores (verdes) con gradiente de color basado en la distancia al extremo
     for point in interior_points:
-        color = get_gradual_color_extreme(point, extreme_point, interior_cmap)  # Gradiente basado en la distancia al extremo
+        color = color_gradual(point, extreme_point, interior_cmap)  # Gradiente basado en la distancia al extremo
         ax.scatter(point[0], point[1], point[2], color=color, s=10)
 
 
@@ -112,6 +132,6 @@ if __name__ == "__main__":
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
 
     # Guardar la imagen en un archivo PNG
-    plt.savefig('mallas/malla_abierta_z.png', bbox_inches='tight')  # 'tight' ajusta los márgenes automáticamente
+    plt.savefig('ejemplos_mallas/graficas/malla_abierta_z.png', bbox_inches='tight')  # 'tight' ajusta los márgenes automáticamente
 
     plt.show()
