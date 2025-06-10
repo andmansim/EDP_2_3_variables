@@ -1,6 +1,9 @@
 
 #Importar librerías
 import numpy as np
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from scipy.interpolate import interp1d
 from funciones_graficar import graficar_superficies_temporales, graficar_matrices_superpuestas, anima_comparacion, animar_derivadas_3d, graficar_derivadas_3d
 
@@ -91,7 +94,6 @@ def inicializar_matriz(a, b, c, d, Nx, Ny, ε, funcion_inicial, transformacion):
 # ===========================
 # Discretización de la EDP
 # ===========================
-
 def ecuacion_inicial(w, i, j, h, k, a):
     # ux = regresivo
     pri = w[i+1,j] * (k) + w[i-1,j] * (k - (a+i*h)*h*k) + w[i,j] *(-2*k + (a+i*h)*h*k + h**2 + h**2 * k)
@@ -271,13 +273,13 @@ def calcular_derivada_teorica(transf, soluciones, epsilons):
 
 
 
-# ===========================
-# Main: Ejecución principal
-# ===========================
+# ======
+# Main
+# ======
 if __name__ == "__main__":
     
     '''
-    Ec de Fokker-Plank: uxx + x ux -ut + u = 0
+    Ec de Fokker-Planck: uxx + x ux -ut + u = 0
     u(x,0) = f(x), f1(x) = x^2, f2(x) = sen(np.pi/5 * x), f3(x) = 1
     x = [0,5], 0 < t < 0.5
     Nx = 50
@@ -328,7 +330,7 @@ if __name__ == "__main__":
         print("Mínimo valor de w:", np.min(w_final))
         
         # Graficar solución
-        graficar_superficies_temporales(X, Y, w_final, 'Solución de la EDP con x^2', 'x2', 0)
+        graficar_superficies_temporales(X, Y, w_final, 'Sol_EDP', 'Solución de la EDP con x^2', 'x2')
         
         #-------------------
         # EDP inicial
@@ -343,7 +345,7 @@ if __name__ == "__main__":
         print("Mínimo valor de w:", np.min(w_final1))
         
         # Graficar solución
-        graficar_superficies_temporales(X1, Y1, w_final1, 'Solución de la EDP con seno', 'seno', 0)
+        graficar_superficies_temporales(X1, Y1, w_final1, 'Sol_EDP', 'Solución de la EDP con seno', 'seno')
         
         #-------------------
         # EDP inicial
@@ -362,7 +364,7 @@ if __name__ == "__main__":
         print("Mínimo valor de w:", np.min(w_final2))
         
         # Graficar solución
-        graficar_superficies_temporales(X2, Y2, w_final2_copy, 'Solución de la EDP con 1', '1', 0)
+        graficar_superficies_temporales(X2, Y2, w_final2_copy, 'Sol_EDP', 'Solución de la EDP con 1', '1')
         
         
         # --------------------------
@@ -389,7 +391,7 @@ if __name__ == "__main__":
     
             
         graficar_matrices_superpuestas(X_1, Y_1, w_final_transf_1, X_prime, Y_prime, w_prime, f'Comparacion_G1_sol_real_sol_teo_x2_{eps}', 'x2', 1)
-        anima_comparacion(soluciones_1, primas_1, 'G1_sol_num_vs_teo_x2', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
+        anima_comparacion(soluciones_1, primas_1, 'x2', '1', 'G1_sol_num_vs_teo_x2', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
         
         #---------------------------
         # Grupo de Lie o transformación 2
@@ -413,7 +415,7 @@ if __name__ == "__main__":
                 graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_x2__{eps}', 'x2', 2)
                 
         graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_x2__{eps}', 'x2', 2)
-        anima_comparacion(soluciones_2, primas_2, 'G2_sol_num_vs_teo_x2', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
+        anima_comparacion(soluciones_2, primas_2, 'x2', '2', 'G2_sol_num_vs_teo_x2', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
       
         
         # ----------------------------
@@ -460,7 +462,7 @@ if __name__ == "__main__":
                 graficar_matrices_superpuestas(X_1, Y_1, w_final_transf_1, X_prime, Y_prime, w_prime, f'Comparacion_G1_sol_real_sol_teo_sen_{eps}', 'seno', 1)
         
         graficar_matrices_superpuestas(X_1, Y_1, w_final_transf_1, X_prime, Y_prime, w_prime, f'Comparacion_G1_sol_real_sol_teo_sen_{eps}', 'seno', 1)
-        anima_comparacion(soluciones_1, primas_1, 'G1_sol_num_vs_teo_sen', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
+        anima_comparacion(soluciones_1, primas_1, 'seno', '1', 'G1_sol_num_vs_teo_sen', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
         
         
         #---------------------------
@@ -485,7 +487,7 @@ if __name__ == "__main__":
                 graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_sen_{eps}', 'seno', 2)
             
         graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_sen_{eps}', 'seno', 2)
-        anima_comparacion(soluciones_2, primas_2, 'G2_sol_num_vs_teo_sen', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
+        anima_comparacion(soluciones_2, primas_2, 'seno', '2', 'G2_sol_num_vs_teo_sen', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
         
         
         
@@ -543,7 +545,7 @@ if __name__ == "__main__":
                 graficar_matrices_superpuestas(X_1, Y_1, w_final_transf_1_copy, X_prime, Y_prime, w_prime_copy, f'Comparacion_G1_sol_real_sol_teo_1_{eps}', '1', 1)
         
         graficar_matrices_superpuestas(X_1, Y_1, w_final_transf_1_copy, X_prime, Y_prime, w_prime_copy, f'Comparacion_G1_sol_real_sol_teo_1_{eps}', '1', 1)
-        anima_comparacion(soluciones_1, primas_1, 'G1_sol_num_vs_teo_1', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
+        anima_comparacion(soluciones_1, primas_1, '1', '1', 'G1_sol_num_vs_teo_1', epsilons1, Nx, Ny, c, d, 'Solución numérica de la EDP G1', 'Solución teórica G1')
         
         
         #---------------------------
@@ -568,7 +570,7 @@ if __name__ == "__main__":
                 graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_1_{eps}', '1', 2)
         
         graficar_matrices_superpuestas(X_2, Y_2, w_final_transf_2, X_prime2, Y_prime2, w_prime2, f'Comparacion_G2_sol_real_sol_teo_1_{eps}', '1', 2)
-        anima_comparacion(soluciones_2, primas_2, 'G2_sol_num_vs_teo_1', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
+        anima_comparacion(soluciones_2, primas_2, '1', '2','G2_sol_num_vs_teo_1', epsilons2, Nx, Ny, c, d, 'Solución numérica de la EDP G2', 'Solución teórica G2')
         
         
         # ----------------------------

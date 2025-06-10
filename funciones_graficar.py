@@ -11,6 +11,12 @@ import os
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 
+'''
+==========================
+FUNCIONES DEL LAPLACIANO
+==========================
+'''
+
 #===============================
 # Graficar superficies 3D
 #===============================
@@ -52,14 +58,18 @@ def graficar_superficies(intervalos, w_final, X, Y, Z, titulo):
     fig.show()
     
 
-
-
+'''
+============================
+FUNCIONES DE FOKKER-PLANCK
+============================
+'''
 #==============================================
 # Graficar superficies temporales 2 variables
 #==============================================
-def graficar_superficies_temporales (X, Y, w_final,titulo, func, transf):
+def graficar_superficies_temporales (X, Y, w_final, nombre, titulo, func):
     '''
-    Graficar superficies con dos variables independientes. Es decir, los ejes son x, y, u(x,y)
+    Graficar superficies con dos variables independientes. 
+    Es decir, los ejes son x, y, u(x,y)
     '''
     
     #graficar
@@ -73,12 +83,9 @@ def graficar_superficies_temporales (X, Y, w_final,titulo, func, transf):
     ax.set_zlabel('Z')
     ax.set_title(f'{titulo}')
     
-    plt.savefig(f'graficas_simetria/{titulo}.png')
-    
-    
     # Definimos el directorio, el nombre del archivo y la extensión
-    nombre_archivo = f"{titulo}.png"
-    directorio = f"C:/Users/andre/Desktop/Cosas Uni/simetria_fotos/funcion_{func}/transform{transf}"
+    nombre_archivo = f"{nombre}.png"
+    directorio = f"Fokker_Planck/graficas/funcion_{func}"
     ruta_completa = os.path.join(directorio, nombre_archivo)
     plt.savefig(ruta_completa, dpi=300, bbox_inches='tight')
     
@@ -95,7 +102,6 @@ def graficar_matrices_superpuestas(X, T, u, X_prime, T_prime, u_prime, titulo, f
     ax = fig.add_subplot(111, projection='3d')
 
     # Graficar u(x,t) con la colormap 'viridis' y opacidad alpha1
-    # ax.plot_surface(X, T, u, cmap='viridis', alpha=alpha1, edgecolor='none') #azul
     ax.scatter(X, T, u,  cmap='viridis', s=1)
     
     # Graficar u'(x',t') con la colormap 'plasma' y opacidad alpha2
@@ -107,12 +113,10 @@ def graficar_matrices_superpuestas(X, T, u, X_prime, T_prime, u_prime, titulo, f
     ax.set_zlabel("Valores de u")
 
     ax.set_title(f'{titulo}')
-    
-    plt.savefig(f'graficas_simetria/{titulo}.png')
-    
+   
     # Definimos el directorio, el nombre del archivo y la extensión
     nombre_archivo = f"{titulo}.png"
-    directorio = f"C:/Users/andre/Desktop/Cosas Uni/simetria_fotos/funcion_{func}/transform{transf}"
+    directorio = f"Fokker_Planck/graficas/funcion_{func}/transform{transf}"
     ruta_completa = os.path.join(directorio, nombre_archivo)
     plt.savefig(ruta_completa, dpi=300, bbox_inches='tight')
 
@@ -124,9 +128,9 @@ def graficar_matrices_superpuestas(X, T, u, X_prime, T_prime, u_prime, titulo, f
 # Animación de comparación de la transformación 
 # con la solución original transformada
 # ==============================================
-def anima_comparacion(soluciones, primas, titulo, epsilons, Nx, Ny, c, d, nombre1, nombre2):
+def anima_comparacion(soluciones, primas, func, transf, titulo, epsilons, Nx, Ny, c, d, nombre1, nombre2):
     '''
-    Función que anima la comparación entre la solución original transformada y la solución de la transformación 1.
+    Función para animar la comparación entre la solución original transformada y la solución de la transformación 1.
     Se grafican ambas soluciones en la misma figura para cada valor de epsilon.
     Adaptando la malla de referencia para que se vea la comparación entre ambas soluciones.
     '''
@@ -219,7 +223,7 @@ def anima_comparacion(soluciones, primas, titulo, epsilons, Nx, Ny, c, d, nombre
     plt.subplots_adjust(top=0.85)
     
     # Guardar la animación como un archivo de video
-    ani.save(f"graficas_simetria/{titulo}.gif", writer="pillow", fps=5)
+    ani.save(f"Fokker_Planck/graficas/funcion_{func}/transform{transf}/{titulo}.gif", writer="pillow", fps=5)
     plt.show()
 
 
@@ -428,10 +432,114 @@ def animar_derivadas_3d(soluciones, epsilons, derivadas_numericas, derivadas_teo
     
     ani = FuncAnimation(fig, actualizar, frames=len(epsilons) - 1, interval=500)
     # Guardamos la animación
-    ani.save(f'graficas_simetria/animacion_derivadas_3d_{transf}_{func}.gif', writer='imagemagick', fps=5)
+    ani.save(f'Fokker_Planck/graficas/funcion_{func}/transform{transf}/animacion_derivadas_3d_{transf}_{func}.gif', writer='imagemagick', fps=5)
     plt.show()
 
 
+# ===========================
+# Función para graficar
+# campos vectoriales (3D)
+# ===========================
+def graficar_derivadas_3d(soluciones, epsilon, derivadas_numericas, derivadas_teoricas, transf, func, punta, base):
+    """
+    Genera una gráfica 3D comparando las derivadas numéricas y teóricas para un único epsilon.
+    """
+    # Extraer datos para el epsilon especificado
+    X, T, U = soluciones[epsilon]
+    dX_num, dT_num, dU_num = derivadas_numericas[epsilon]
+    dX_teo, dT_teo, dU_teo = derivadas_teoricas[epsilon]
+
+    # Calcular los límites dinámicos
+    X_min, X_max = np.min(X), np.max(X)
+    T_min, T_max = np.min(T), np.max(T)
+    U_min, U_max = np.min(U), np.max(U)
+
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_xlim(X_min, X_max)
+    ax.set_ylim(T_min, T_max)
+    ax.set_zlim(U_min, U_max)
+    ax.set_xlabel("X")
+    ax.set_ylabel("T")
+    ax.set_zlabel("U")
+    ax.set_title(f"Comparación de derivadas (Transformación {transf}) - Epsilon: {epsilon:.2f}")
+    
+    # Etiquetas fijas en una esquina
+    ax.text2D(0.02, 0.95, "Numérica: azul", transform=ax.transAxes, color='blue', fontsize=10)
+    ax.text2D(0.02, 0.90, "Teórica: rojo", transform=ax.transAxes, color='red', fontsize=10)
+
+    # Reducir densidad y escalar vectores
+    step = 20
+    X_sample = X[::step, ::step]
+    T_sample = T[::step, ::step]
+    U_sample = U[::step, ::step]
+
+    if transf == 2:
+        # Normalizar los vectores a una longitud fija
+        fixed_length = 0.5
+        magnitudes_num = np.sqrt(dX_num[::step, ::step]**2 + dT_num[::step, ::step]**2 + dU_num[::step, ::step]**2)
+        magnitudes_teo = np.sqrt(dX_teo[::step, ::step]**2 + dT_teo[::step, ::step]**2 + dU_teo[::step, ::step]**2)
+
+        magnitudes_num = np.clip(magnitudes_num, 0.5, 7.0)
+        magnitudes_teo = np.clip(magnitudes_teo, 0.5, 7.0)
+
+        dX_num_sample = (dX_num[::step, ::step] / magnitudes_num) * fixed_length
+        dT_num_sample = (dT_num[::step, ::step] / magnitudes_num) * fixed_length
+        dU_num_sample = (dU_num[::step, ::step] / magnitudes_num) * fixed_length
+
+        dX_teo_sample = (dX_teo[::step, ::step] / magnitudes_teo) * fixed_length
+        dT_teo_sample = (dT_teo[::step, ::step] / magnitudes_teo) * fixed_length
+        dU_teo_sample = (dU_teo[::step, ::step] / magnitudes_teo) * fixed_length
+
+    elif transf == 1:
+        scale_factor = 0.5
+        magnitudes_num = np.sqrt(dX_num[::step, ::step]**2 + dT_num[::step, ::step]**2 + dU_num[::step, ::step]**2)
+        magnitudes_teo = np.sqrt(dX_teo[::step, ::step]**2 + dT_teo[::step, ::step]**2 + dU_teo[::step, ::step]**2)
+
+        magnitudes_num[magnitudes_num == 0] = 1  # Evitar división por cero
+        magnitudes_teo[magnitudes_teo == 0] = 1  # Evitar división por cero
+
+        dX_num_sample = (dX_num[::step, ::step] / magnitudes_num) * scale_factor
+        dT_num_sample = (dT_num[::step, ::step] / magnitudes_num) * scale_factor
+        dU_num_sample = (dU_num[::step, ::step] / magnitudes_num) * scale_factor
+
+        dX_teo_sample = (dX_teo[::step, ::step] / magnitudes_teo) * scale_factor
+        dT_teo_sample = (dT_teo[::step, ::step] / magnitudes_teo) * scale_factor
+        dU_teo_sample = (dU_teo[::step, ::step] / magnitudes_teo) * scale_factor
+
+   
+    for i in range(X_sample.shape[0]):
+                for j in range(X_sample.shape[1]):
+                    origen = np.array([X_sample[i, j], T_sample[i, j], U_sample[i, j]])
+                    vector = np.array([dX_num_sample[i, j], dT_num_sample[i, j], dU_num_sample[i, j]])
+                    dibujar_flecha_con_cono(ax, origen, vector, 'blue', punta, base)
+   
+    for i in range(X_sample.shape[0]):
+                for j in range(X_sample.shape[1]):
+                    origen = np.array([X_sample[i, j], T_sample[i, j], U_sample[i, j]])
+                    vector = np.array([dX_teo_sample[i, j], dT_teo_sample[i, j], dU_teo_sample[i, j]])
+                    dibujar_flecha_con_cono(ax, origen, vector, 'red', punta, base)
+
+    # Dibujar la superficie
+    ax.plot_surface(X, T, U, cmap='viridis', alpha=0.6)
+
+    ax.legend()
+    # Definimos el directorio, el nombre del archivo y la extensión
+    nombre_archivo = f"derivadas_3d_{transf}_{func}_{epsilon}.png"
+    directorio = f"Fokker_Planck/graficas/funcion_{func}/transform{transf}"
+    ruta_completa = os.path.join(directorio, nombre_archivo)
+    plt.savefig(ruta_completa, dpi=300, bbox_inches='tight')
+    
+    plt.show()
+
+
+
+
+'''
+================================
+FUNCIONES DE LA CADENA COLGANTE
+================================
+'''
 
 # ===========================================
 # Visualizar evolución 
