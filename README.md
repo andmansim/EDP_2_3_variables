@@ -14,7 +14,7 @@ La url del repositorio es: [https://github.com/andmansim/EDP_2_3_variables.git](
 
 A continuación, se describen las carpeta y archivos principales del repositorio. Todos ellos contiene comentarios que explican su funcionamiento:
 
-### `/Fokker_Planck`
+### `Fokker_Planck/`
 Contiene el código para la resolución de la ecuación de **Fokker-Planck** en dos variables independientes. Se evalúa el problema con tres condiciones iniciales distintas. En cada caso, se resuelve la EDP inicial y se compara la solución real de la EDP transformada mediante un **grupo de Lie** con la transformación de la solución inicial de la EDP mediante el mismo grupo. En concreto, se analizan dos grupos de Lie y sus álgebras, contrastando los resultados con la derivada numérica. 
 
 ### `cadena_colgante/` 
