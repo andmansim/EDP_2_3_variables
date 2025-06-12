@@ -1,4 +1,4 @@
-# EDP_2_3_variables
+# TFG_EDP_2_3_variables
 
 Este repositorio contiene el código necesario para la resolución de ecuaciones en derivadas parciales (EDP) en dos y tres variables, utilizando el método de diferencias finitas.Se resuelven y evalúan distintas ecuaciones con el objetivo de verificar la validez del método y obtener una representación de su solución teórica, en algunos casos. 
 
